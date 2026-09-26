@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LinkedListTest {
     @Test
-    void addAndGet(){
+    void addAndGet() {
         LinkedList l = new LinkedList();
         l.add(10);
         l.add(20);
@@ -12,21 +12,23 @@ class LinkedListTest {
         assertEquals(10, l.get(0));
         assertEquals(30, l.get(2));
     }
+
     @Test
-    void addAtIndex(){
+    void addAtIndex() {
         LinkedList l = new LinkedList();
         l.add(1);
         l.add(2);
         l.add(3);
-        l.add(1,99);
+        l.add(1, 99);
         assertEquals(4, l.size());
         assertEquals(1, l.get(0));
         assertEquals(99, l.get(1));
         assertEquals(2, l.get(2));
-        assertEquals(3,l.get(3));
+        assertEquals(3, l.get(3));
     }
+
     @Test
-    void addAtBeginning(){
+    void addAtBeginning() {
         LinkedList l = new LinkedList();
         l.add(1);
         l.add(2);
@@ -35,8 +37,9 @@ class LinkedListTest {
         assertEquals(1, l.get(1));
         assertEquals(2, l.get(2));
     }
+
     @Test
-    void removeAtIndex(){
+    void removeAtIndex() {
         LinkedList l = new LinkedList();
         l.add(1); l.add(2); l.add(3);
         int removed = l.remove(1);
@@ -45,42 +48,104 @@ class LinkedListTest {
         assertEquals(1, l.get(0));
         assertEquals(3, l.get(1));
     }
+
     @Test
-    void removeFirst(){
+    void removeFirst() {
         LinkedList l = new LinkedList();
         l.add(1); l.add(2); l.add(3);
-        int removed = l.remove (0);
+        int removed = l.remove(0);
         assertEquals(1, removed);
         assertEquals(2, l.get(0));
     }
+
     @Test
-    void contains(){
+    void contains() {
         LinkedList l = new LinkedList();
         l.add(5); l.add(15); l.add(25);
         assertTrue(l.contains(15));
         assertFalse(l.contains(100));
     }
+
     @Test
-    void growsBeyondSmallSize(){
+    void growsBeyondSmallSize() {
         LinkedList l = new LinkedList();
         for (int i = 0; i < 100; i++) l.add(i);
         assertEquals(100, l.size());
-        for (int i=0; i< 100; i++) assertEquals(i, l.get(i));
+        for (int i = 0; i < 100; i++) assertEquals(i, l.get(i));
     }
+
     @Test
-    void invalidIndexThrows(){
+    void invalidIndexThrows() {
         LinkedList l = new LinkedList();
         l.add(1);
         assertThrows(IndexOutOfBoundsException.class, () -> l.get(5));
         assertThrows(IndexOutOfBoundsException.class, () -> l.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> l.remove(10));
     }
+
     @Test
-    void emptyStructure(){
+    void emptyStructure() {
         LinkedList l = new LinkedList();
         assertEquals(0, l.size());
         assertFalse(l.contains(1));
         assertThrows(IndexOutOfBoundsException.class, () -> l.get(0));
     }
 
+    @Test
+    void duplicateValues() {
+        LinkedList l = new LinkedList();
+        l.add(7); l.add(7); l.add(7);
+        assertEquals(3, l.size());
+        assertTrue(l.contains(7));
+        l.remove(1);
+        assertEquals(2, l.size());
+        assertEquals(7, l.get(0));
+        assertEquals(7, l.get(1));
+    }
+
+    @Test
+    void matchesJavaLinkedList() {
+        java.util.LinkedList<Integer> reference = new java.util.LinkedList<>();
+        LinkedList l = new LinkedList();
+        java.util.Random r = new java.util.Random(1);
+        for (int i = 0; i < 500; i++) {
+            int x = r.nextInt(100);
+            reference.add(x);
+            l.add(x);
+        }
+        assertEquals(reference.size(), l.size());
+        for (int i = 0; i < reference.size(); i++) {
+            assertEquals(reference.get(i), l.get(i));
+        }
+    }
+
+    @Test
+    void singleElement() {
+        LinkedList l = new LinkedList();
+        l.add(99);
+        assertEquals(1, l.size());
+        assertEquals(99, l.get(0));
+        assertTrue(l.contains(99));
+        assertEquals(99, l.remove(0));
+        assertEquals(0, l.size());
+    }
+
+    @Test
+    void boundaryIndices() {
+        LinkedList l = new LinkedList();
+        l.add(1); l.add(2); l.add(3);
+        l.add(3, 100);
+        assertEquals(4, l.size());
+        assertEquals(100, l.get(3));
+        int removed = l.remove(3);
+        assertEquals(100, removed);
+        assertEquals(3, l.size());
+    }
+    @Test
+    void invalidIndexOnAddThrows() {
+        LinkedList l = new LinkedList();
+        l.add(1); l.add(2);
+        assertThrows(IndexOutOfBoundsException.class, () -> l.add(-1, 99));
+        assertThrows(IndexOutOfBoundsException.class, () -> l.add(3, 99));
+    }
 }
